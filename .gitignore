@@ -1,6 +1,8 @@
 ###> app ###
 /docker/*/volumes/*
 !/docker/*/volumes/.gitignore
+/docker/memcached/volumes/*
+!/docker/memcached/volumes/.gitignore
 ###< app ###
 
 ###> symfony/framework-bundle ###

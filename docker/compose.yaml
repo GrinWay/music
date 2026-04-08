@@ -21,6 +21,15 @@ services:
     env_file:
       - './../.env'
 
+  music_memcached:
+    container_name: music_memcached
+    build:
+      context: './memcached'
+      dockerfile: 'Dockerfile'
+    restart: unless-stopped
+    volumes:
+      - './memcached/volumes/:/var/log/memcached/'
+
 networks:
   default:
     driver: bridge
