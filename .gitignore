@@ -1,3 +1,7 @@
+###> app ###
+/docker/*/volumes/*
+!/docker/*/volumes/.gitignore
+###< app ###
 
 ###> symfony/framework-bundle ###
 /.env.local

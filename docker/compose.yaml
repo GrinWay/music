@@ -1,0 +1,20 @@
+name: music
+
+services:
+  frankenphp:
+    container_name: music_frankenphp
+    restart: 'unless-stopped'
+    build:
+      # Контекст для Dockerfile и для build секции
+      context: '..'
+      dockerfile: './docker/frankenphp/Dockerfile'
+    working_dir: '/app/'
+    volumes:
+      - './../:/app/'
+      - './frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro'
+    env_file:
+      - './../.env'
+
+networks:
+  default:
+    driver: bridge
