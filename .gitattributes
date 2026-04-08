@@ -1,0 +1,56 @@
+# === Общие настройки ===
+* text=auto                     # Автоопределение текстовых файлов
+* eol=lf                        # Принудительное использование LF в репозитории
+
+# === Код и шаблоны ===
+*.html    text diff=html
+*.htm     text diff=html
+*.css     text diff=css
+*.scss    text diff=css
+*.less    text diff=css
+*.js      text diff=javascript
+*.ts      text diff=typescript
+*.jsx     text diff=javascript
+*.tsx     text diff=typescript
+*.php     text diff=php
+*.json    text diff=json
+*.xml     text diff=xml
+*.yml     text diff=yaml
+*.yaml    text diff=yaml
+*.md      text diff=markdown
+*.txt     text
+*.vue     text
+
+# === Шрифты и бинарные ресурсы ===
+*.svg     binary
+*.png     binary
+*.jpg     binary
+*.jpeg    binary
+*.gif     binary
+*.ico     binary
+*.woff    binary
+*.woff2   binary
+*.ttf     binary
+*.eot     binary
+
+# === Конфиги и скрипты ===
+*.sh      text eol=lf
+*.bat     text eol=crlf
+*.ps1     text eol=crlf
+*.cmd     text eol=crlf
+
+# === Исключения для больших бинарных файлов ===
+*.mp4     binary
+*.mp3     binary
+*.avi     binary
+*.mov     binary
+*.zip     binary
+*.tar     binary
+*.gz      binary
+*.7z      binary
+
+# === Локальные IDE/системные файлы ===
+*.DS_Store     binary
+*.thumbs.db    binary
+*.idea/**      export-ignore
+*.vscode/**    export-ignore
