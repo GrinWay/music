@@ -1,7 +1,12 @@
 name: music
 
+x-extra_hosts: &x-extra_hosts
+  extra_hosts:
+    - "host.docker.internal:host-gateway"
+
 services:
   frankenphp:
+    <<: *x-extra_hosts
     container_name: music_frankenphp
     restart: 'unless-stopped'
     build:
@@ -12,6 +17,7 @@ services:
     volumes:
       - './../:/app/'
       - './frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro'
+      - './frankenphp/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro'
     env_file:
       - './../.env'
 

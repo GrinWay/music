@@ -4,7 +4,7 @@
     "minimum-stability": "stable",
     "prefer-stable": true,
     "require": {
-        "php": ">=8.4",
+        "php": ">=8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
         "symfony/console": "8.0.*",
@@ -15,6 +15,7 @@
         "symfony/yaml": "8.0.*"
     },
     "require-dev": {
+        "symfony/maker-bundle": "^1.67"
     },
     "config": {
         "allow-plugins": {
