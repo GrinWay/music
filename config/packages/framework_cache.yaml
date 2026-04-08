@@ -16,7 +16,11 @@ framework:
 
         # Namespaced pools use the above "app" backend by default
 
-        default_memcached_provider: '%app.memcache.host%'
+        default_memcached_provider: '%app.memcached.host%'
 
         pools:
-            memcache: null
+            memcache:
+                adapter: 'cache.adapter.memcached'
+                default_lifetime: '%app.31_days_in_sec%'
+                provider: '%app.memcached.host%'
+                tags: true

@@ -1,2 +1,2 @@
 parameters:
-    app.memcache.host: 'memcached://music_memcached:11211'
+    app.memcached.host: '%env(APP_MEMCACHED_HOST)%'

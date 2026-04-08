@@ -1,0 +1,3 @@
+is.remove_music: |
+    Удалить треки?
+    {{ files_to_remove }}

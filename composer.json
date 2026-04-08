@@ -12,6 +12,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "8.0.*",
         "symfony/runtime": "8.0.*",
+        "symfony/translation": "8.0.*",
         "symfony/yaml": "8.0.*"
     },
     "require-dev": {
@@ -57,15 +58,18 @@
         },
         "auto-deptrac-layers": "vendor/bin/deptrac analyse --config-file=config/deptrac/layers.yaml",
         "auto-deptrac-modules": "vendor/bin/deptrac analyse --config-file=config/deptrac/modules.yaml",
+        "csfixer": "vendor/bin/php-cs-fixer fix src --allow-risky=yes --rules=@Symfony",
 
         "post-install-cmd": [
             "@auto-scripts",
-            "@auto-deptrac"
+            "@auto-deptrac",
+            "@csfixer"
         ],
 
         "post-update-cmd": [
             "@auto-scripts",
-            "@auto-deptrac"
+            "@auto-deptrac",
+            "@csfixer"
         ]
     },
     "conflict": {
