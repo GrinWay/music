@@ -1,0 +1,37 @@
+# Конфиг слоёв, независим от модулей.
+
+deptrac:
+
+    paths:
+        - './../../src'
+
+    # Берутся во внимание слои
+    layers:
+        -   name: Domain
+            collectors:
+                -   type: classNameRegex
+                    value: '~^App\\.*\\Domain\\~'
+        -   name: Application
+            collectors:
+                -   type: classNameRegex
+                    value: '~^App\\.*\\Application\\~'
+        -   name: Infrastructure
+            collectors:
+                -   type: classNameRegex
+                    value: '~^App\\.*\\Infrastructure\\~'
+        -   name: External
+            collectors:
+                -   type: classNameRegex
+                    value: '~^(?!App\\)~'
+
+    ruleset:
+        # Слой Domain ни от кого не зависит.
+        Domain:
+        # Слой Application может зависеть от слоя Domain.
+        Application:
+            - Domain
+        # Слой Infrastructure может зависеть от слоя Application, Domain и External.
+        Infrastructure:
+            - Domain
+            - Application
+            - External

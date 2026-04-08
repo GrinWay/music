@@ -15,6 +15,7 @@
         "symfony/yaml": "8.0.*"
     },
     "require-dev": {
+        "deptrac/deptrac": "^4.6",
         "friendsofphp/php-cs-fixer": "^3.94",
         "symfony/maker-bundle": "^1.67"
     },
@@ -54,11 +55,17 @@
             "cache:clear": "symfony-cmd",
             "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
+        "auto-deptrac-layers": "vendor/bin/deptrac analyse --config-file=config/deptrac/layers.yaml",
+        "auto-deptrac-modules": "vendor/bin/deptrac analyse --config-file=config/deptrac/modules.yaml",
+
         "post-install-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "@auto-deptrac"
         ],
+
         "post-update-cmd": [
-            "@auto-scripts"
+            "@auto-scripts",
+            "@auto-deptrac"
         ]
     },
     "conflict": {

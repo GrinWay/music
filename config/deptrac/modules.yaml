@@ -1,0 +1,24 @@
+# Конфиг модулей, независим от слоёв.
+
+deptrac:
+
+    paths:
+        - './../../src'
+
+    # Берутся во внимание модули
+    layers:
+        -   name: Framework
+            collectors:
+                -   type: classNameRegex
+                    value: '~^App\\Framework\\~'
+        -   name: Music
+            collectors:
+                -   type: classNameRegex
+                    value: '~^App\\Music\\~'
+
+    # (№1) Запрещаю межмодульное взаимодействие
+    ruleset:
+
+    # (№2) Но оставляю ровно 1 место в каждом модуле для межмодульного взаимодействия
+    exclude_files:
+        - '~./../../src/.*/Infrastructure/ModuleAdapter~'
