@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Music\Infrastructure\Service;
+namespace App\Music\Infrastructure\MusicService;
 
 use App\Music\Domain\Contract\Service\MusicMetadataServiceInterface;
 

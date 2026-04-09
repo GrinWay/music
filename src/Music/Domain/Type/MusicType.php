@@ -7,5 +7,6 @@ namespace App\Music\Domain\Type;
  */
 enum MusicType: string
 {
-//    case Spotify = 'spotify';
+    //    case Spotify = 'spotify';
+    case Deezer = 'deezer';
 }

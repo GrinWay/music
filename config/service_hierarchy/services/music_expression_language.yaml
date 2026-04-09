@@ -1,0 +1,3 @@
+services:
+    Symfony\Component\ExpressionLanguage\ExpressionLanguage $musicExpressionLanguage:
+        class: Symfony\Component\ExpressionLanguage\ExpressionLanguage

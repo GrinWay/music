@@ -7,6 +7,21 @@ framework:
             app.spotify.http_client:
                 base_uri: 'https://api.spotify.com/v1/'
                 auth_bearer: '%env(APP_SPOTIFY_ACCESS_TOKEN)%'
-#                auth_basic: '%env(resolve:APP_SPOTIFY_CLIENT_ID_AND_SECRET_BASE64)%'
-#                headers:
-#                    Content-Type: 'application/json'
+
+            app.deezer.search.http_client:
+                base_uri: 'https://api.deezer.com/search/'
+                headers:
+                    Content-Type: 'application/json'
+                retry_failed:
+                    enabled: true
+                    max_retries: 3
+                    delay: 1000
+                    multiplier: 2
+                    max_delay: 2000
+                    jitter: 0.1
+                    http_codes:
+                        429: ['GET']
+                        500: ['GET']
+                        502: ['GET']
+                        503: ['GET']
+                        504: ['GET']

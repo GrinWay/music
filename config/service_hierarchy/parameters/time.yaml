@@ -1,2 +1,3 @@
 parameters:
     app.31_days_in_sec: '2678400'
+    app.365_days_in_sec: '31536000'

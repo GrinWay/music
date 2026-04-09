@@ -11,11 +11,15 @@
         "jwilsson/spotify-web-api-php": "^7.1",
         "symfony/console": "8.0.*",
         "symfony/dotenv": "8.0.*",
+        "symfony/expression-language": "8.0.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "8.0.*",
         "symfony/http-client": "8.0.*",
+        "symfony/monolog-bundle": "^4.0",
         "symfony/runtime": "8.0.*",
+        "symfony/string": "8.0.*",
         "symfony/translation": "8.0.*",
+        "symfony/validator": "8.0.*",
         "symfony/yaml": "8.0.*"
     },
     "require-dev": {

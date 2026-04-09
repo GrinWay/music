@@ -1,14 +1,13 @@
 <?php
 
-namespace App\Music\Infrastructure\Service;
+namespace App\Music\Infrastructure\MusicService;
 
-use App\Music\Domain\Contract\Service\CertainMusicServiceInterface;
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
 use SpotifyWebAPI\Session as WebApiSession;
 use SpotifyWebAPI\SpotifyWebAPI;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class SpotifyMusicService implements CertainMusicServiceInterface
+class SpotifyMusicService extends AbstractCertainMusicService
 {
     public const CACHE_SESSION_KEY = 'app.spotify.session';
 
@@ -17,9 +16,9 @@ class SpotifyMusicService implements CertainMusicServiceInterface
     private readonly string $accessToken;
 
     public function __construct(
-        #[Autowire(env: 'APP_SPOTIFY_CLIENT_ID')] private readonly string     $clientId,
+        #[Autowire(env: 'APP_SPOTIFY_CLIENT_ID')] private readonly string $clientId,
         #[Autowire(env: 'APP_SPOTIFY_CLIENT_SECRET')] private readonly string $clientSecret,
-        private readonly Memcache                                             $memcache,
+        private readonly Memcache $memcache,
     ) {
         $this->webApiSession = new WebApiSession(
             $this->clientId,
@@ -60,5 +59,11 @@ class SpotifyMusicService implements CertainMusicServiceInterface
         }
 
         return $musicInfo;
+    }
+
+    public function getCurrentRating(?array $musicInfo): ?int
+    {
+        // TODO: Implement getCurrentRating() method.
+        return null;
     }
 }

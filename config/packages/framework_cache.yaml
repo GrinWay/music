@@ -21,6 +21,6 @@ framework:
         pools:
             memcache:
                 adapter: 'cache.adapter.memcached'
-                default_lifetime: '%app.31_days_in_sec%'
+                default_lifetime: '%app.365_days_in_sec%'
                 provider: '%app.memcached.host%'
                 tags: true

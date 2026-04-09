@@ -3,7 +3,7 @@
 namespace App\Music\Infrastructure\Command;
 
 use App\Music\Domain\Type\MusicType;
-use App\Music\Infrastructure\Service\MusicService;
+use App\Music\Infrastructure\MusicService\MusicService;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -12,7 +12,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Validation;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+use function Symfony\Component\String\u;
 
 /**
  * Invocable commands.
@@ -21,20 +25,32 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 #[AsCommand(
     name: 'rm',
-    description: 'todo current',
+    description: 'Removes music by its rating.',
 )]
 class RmCommand extends Command
 {
     private SymfonyStyle $io;
 
     public function __construct(
-        private readonly MusicService        $musicService,
+        private readonly MusicService $musicService,
         private readonly TranslatorInterface $t,
-        private readonly Filesystem          $fs,
-        ?string                              $name = null,
-        ?callable                            $code = null,
+        private readonly Filesystem $fs,
+        ?string $name = null,
+        ?callable $code = null,
     ) {
         parent::__construct($name, $code);
+    }
+
+    private static function getNormalizeRating(string $rating): string
+    {
+        return (string) u($rating)->collapseWhitespace();
+    }
+
+    private static function isInvalidRatingArg(string $rating): bool
+    {
+        return !Validation::createIsValidCallable(
+            new Assert\Regex('/^[><]\s?\d{1,3}$/')
+        )($rating);
     }
 
     protected function initialize(InputInterface $input, OutputInterface $output): void
@@ -43,9 +59,18 @@ class RmCommand extends Command
     }
 
     public function __invoke(
-        #[Argument] MusicType $strategy,
         #[Argument] string $rating,
+        #[Argument] MusicType $strategy = MusicType::Deezer,
     ): int {
+        $rating = self::getNormalizeRating($rating);
+        if (self::isInvalidRatingArg($rating)) {
+            $this->io->error([
+                $this->t->trans('command.rm.invalid_rating_arg', ['{{ rating }}' => $rating]),
+            ]);
+
+            return Command::INVALID;
+        }
+
         $filesToRemove = [];
         $beforeRmCycleHook = static function (SplFileInfo $splFileInfo) use (&$filesToRemove): void {
             $filesToRemove[] = $splFileInfo->getRealPath();
