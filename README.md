@@ -25,7 +25,7 @@ You have to have installed `docker` and `docker compose`.
     docker compose down && docker compose up
     ```
 
-3.  Enter to the docker container
+3.  At last execute the removing
 
     ```
     docker exec -it music music rm '< 90'
