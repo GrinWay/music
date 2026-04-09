@@ -1,0 +1,50 @@
+## For what?
+
+For removing music with low rating by chosen strategy.
+
+Imaging you downloaded plenty of tracks and want to get rid of ones with low rating.
+
+## Prerequisite
+
+You have to have installed `docker` and `docker-compose`.
+
+## Usage
+
+1.  Copy music files to `load_music` directory of this project
+2.  Run application by command:
+
+    ```
+    cd '.../PROJECT_ROOT/docker/'
+    ```
+
+    ```
+    docker compose down && docker compose up
+    ```
+
+3.  Enter to the docker container
+
+    ```
+    docker exec -it music music rm '< 90'
+    ```
+
+4.  Accept or deny removal tracks with set rating.
+
+## What is strategy?
+
+Strategy decides what API to choose to download the music rating.
+
+By default music rating is taken with the help of `deezer` strategy.
+
+To tell the truth, it’s the only available strategy, because it’s free in contrast to non-existent `spotify` strategy.
+
+But if I could obtain an appropriate subscription for an hour, I could make it working…
+
+## Advanced
+
+Inside the container you could pass the strategy explicitly:
+
+```
+music rm '< 90' deezer
+```
+
+Amazing, I love Symfony.
