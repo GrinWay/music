@@ -6,12 +6,16 @@ Imaging you downloaded plenty of tracks and want to get rid of ones with low rat
 
 ## Prerequisite
 
-You have to have installed `docker` and `docker-compose`.
+You have to have installed `docker` and `docker compose`.
 
 ## Usage
 
 1.  Copy music files to `load_music` directory of this project
-2.  Run application by command:
+2.  Download project and run application:
+
+    ```
+    git clone git@github.com:GrinWay/music.git
+    ```
 
     ```
     cd '.../PROJECT_ROOT/docker/'
