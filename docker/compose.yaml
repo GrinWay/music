@@ -31,6 +31,29 @@ services:
     volumes:
       - './memcached/volumes/:/var/log/memcached/'
 
+  elasticsearch:
+    build: './elasticsearch'
+    container_name: music_elasticsearch
+    volumes:
+      - './elasticsearch/volumes:/usr/share/elasticsearch/data'
+    restart: unless-stopped
+
+  logstash:
+    build: './logstash'
+    container_name: music_logstash
+    volumes:
+      - './logstash/logstash.conf:/usr/share/logstash/pipeline/logstash.conf'
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
+  kibana:
+    build: './kibana'
+    container_name: music_kibana
+    depends_on:
+      - elasticsearch
+    restart: unless-stopped
+
 networks:
   default:
     driver: bridge

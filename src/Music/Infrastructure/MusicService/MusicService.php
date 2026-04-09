@@ -6,9 +6,11 @@ use App\Music\Domain\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Domain\Contract\Service\MusicMetadataServiceInterface;
 use App\Music\Domain\Type\MusicType;
 use App\Music\Infrastructure\Contract\MusicStrategy\MusicStrategyInterface;
+use App\Music\Infrastructure\ModuleAdapter\Memcache;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Container\NotFoundExceptionInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireLocator;
 use Symfony\Component\Filesystem\Filesystem;
@@ -26,12 +28,20 @@ class MusicService implements GenericMusicServiceInterface
         #[AutowireLocator(MusicStrategyInterface::class, 'key')] private readonly ContainerInterface $strategyLocator,
         private readonly Filesystem $fs,
         private readonly MusicMetadataServiceInterface $musicMetadataService,
+        private readonly LoggerInterface $musicLogger,
+        private readonly Memcache $memcache,
     ) {
         $this->maxDepth = \sprintf('<= %s', $maxDepth);
     }
 
     public function getArtistFromMetadata(\SplFileInfo $musicFileInfo): ?string
     {
+        $artistCacheKey = \hash('xxh128', \json_encode($musicFileInfo));
+        $artist = $this->memcache->get($artistCacheKey);
+        if (null !== $artist) {
+            return $artist;
+        }
+
         $realPath = $musicFileInfo->getRealPath();
 
         $artistNameByDirName = \basename(Path::getDirectory($realPath));
@@ -49,11 +59,19 @@ class MusicService implements GenericMusicServiceInterface
             ?? $artistNameByDirName
             ?? null;
 
-        return \trim($artist);
+        $artist = \trim($artist);
+        $this->memcache->set($artistCacheKey, $artist, ['app.music.artist']);
+        return $artist;
     }
 
     public function getMusicNameFromMetadata(\SplFileInfo $musicFileInfo): ?string
     {
+        $musicNameCacheKey = \hash('xxh128', \json_encode($musicFileInfo));
+        $musicName = $this->memcache->get($musicNameCacheKey);
+        if (null !== $musicName) {
+            return $musicName;
+        }
+
         $metadata = $this->musicMetadataService->analyze(
             $musicFileInfo->getRealPath()
         );
@@ -68,13 +86,15 @@ class MusicService implements GenericMusicServiceInterface
             ?? \preg_replace('~^(.+)[.][^.]+$~', '$1', $musicFileInfo->getFilename())
             ?? null;
 
-        return \trim($musicName);
+        $musicName = \trim($musicName);
+        $this->memcache->set($musicNameCacheKey, $musicName, ['app.music.music_name']);
+        return $musicName;
     }
 
     /**
      * Removes existing music by rating.
      *
-     * @param ?callable $beforeRemoveMusicCycleHook Throw on cancel removal
+     * @param ?callable $beforeRemoveMusicCycleHook Throw if you want to cancel removal
      *
      * @throws ContainerExceptionInterface
      * @throws NotFoundExceptionInterface
@@ -84,39 +104,31 @@ class MusicService implements GenericMusicServiceInterface
         MusicType $strategy,
         string $rating,
         bool $clearStrategyMusicInfoCache,
-        bool $throw,
         ?callable $beforeRemoveMusicCycleHook = null,
-    ): bool {
-        $isAllRemoved = true;
-        try {
-            /** @var MusicStrategyInterface $strategy */
-            $strategy = $this->strategyLocator->get($strategy->value);
+    ): self {
+        /** @var MusicStrategyInterface $strategy */
+        $strategy = $this->strategyLocator->get($strategy->value);
 
-            if (true === $clearStrategyMusicInfoCache) {
-                $strategy->clearCacheByGenericTag();
-            }
-
-            $musicFinder = $this->getMusicFinder();
-            $musicFinder = $this->getFilteredByMusicRating($musicFinder, $strategy, $rating);
-            /** @var SplFileInfo $finderFileInfo */
-            foreach ($musicFinder as $finderFileInfo) {
-                if (null !== $beforeRemoveMusicCycleHook) {
-                    try {
-                        $beforeRemoveMusicCycleHook($finderFileInfo);
-                    } catch (\Throwable) {
-                        continue;
-                    }
-                }
-                $this->fs->remove($finderFileInfo->getRealPath());
-            }
-        } catch (\Throwable $e) {
-            $isAllRemoved = false;
-            if (true === $throw) {
-                throw $e;
-            }
+        if (true === $clearStrategyMusicInfoCache) {
+            $strategy->clearCacheByGenericTag();
         }
 
-        return $isAllRemoved;
+        $musicFinder = $this->getMusicFinder();
+        $musicFinder = $this->getFilteredByMusicRating($musicFinder, $strategy, $rating);
+        /** @var SplFileInfo $finderFileInfo */
+        foreach ($musicFinder as $finderFileInfo) {
+            if (null !== $beforeRemoveMusicCycleHook) {
+                try {
+                    $beforeRemoveMusicCycleHook($finderFileInfo);
+                } catch (\Throwable) {
+                    continue;
+                }
+            }
+            $realPath = $finderFileInfo->getRealPath();
+            $this->fs->remove($realPath);
+            $this->musicLogger->notice(\sprintf('Track "%s" removed', $realPath));
+        }
+        return $this;
     }
 
     private function getMusicFinder(): Finder

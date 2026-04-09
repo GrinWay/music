@@ -4,6 +4,7 @@ namespace App\Music\Infrastructure\Command;
 
 use App\Music\Domain\Type\MusicType;
 use App\Music\Infrastructure\MusicService\MusicService;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Attribute\Option;
@@ -36,6 +37,8 @@ class RmCommand extends Command
         private readonly MusicService $musicService,
         private readonly TranslatorInterface $t,
         private readonly Filesystem $fs,
+        private readonly LoggerInterface $musicLogger,
+        private readonly LoggerInterface $phpLogger,
         ?string $name = null,
         ?callable $code = null,
     ) {
@@ -67,54 +70,58 @@ class RmCommand extends Command
             name: 'cache-clear',
         )] bool $clearStrategyMusicInfoCache = false,
     ): int {
-        $rating = self::getNormalizeRating($rating);
-        if (self::isInvalidRatingArg($rating)) {
-            $this->io->error([
-                $this->t->trans('command.rm.invalid_rating_arg', ['{{ rating }}' => $rating]),
-            ]);
+        try {
+            $rating = self::getNormalizeRating($rating);
+            if (self::isInvalidRatingArg($rating)) {
+                $this->io->error([
+                    $this->t->trans('command.rm.invalid_rating_arg', ['{{ rating }}' => $rating]),
+                ]);
 
-            return Command::INVALID;
-        }
+                return Command::INVALID;
+            }
 
-        $filesToRemove = [];
-        $beforeRmCycleHook = static function (SplFileInfo $splFileInfo) use (&$filesToRemove): void {
-            $filesToRemove[] = $splFileInfo->getRealPath();
-            throw new \RuntimeException('Do not remove immediately.');
-        };
-        $this->musicService->rm(
-            $strategy,
-            $rating,
-            $clearStrategyMusicInfoCache,
-            false,
-            $beforeRmCycleHook
-        );
-
-        if (empty($filesToRemove)) {
-            $this->io->warning(
-                $this->t->trans('command.rm.no_files_to_remove', ['{{ rating }}' => $rating])
+            $filesToRemove = [];
+            $beforeRmCycleHook = static function (SplFileInfo $splFileInfo) use (&$filesToRemove): void {
+                $filesToRemove[] = $splFileInfo->getRealPath();
+                throw new \RuntimeException('Do not remove immediately.');
+            };
+            $this->musicService->rm(
+                $strategy,
+                $rating,
+                $clearStrategyMusicInfoCache,
+                $beforeRmCycleHook
             );
 
-            return Command::SUCCESS;
-        }
+            if (empty($filesToRemove)) {
+                $this->io->warning(
+                    $this->t->trans('command.rm.no_files_to_remove', ['{{ rating }}' => $rating])
+                );
 
-        $params = [
-            '{{ files_to_remove }}' => \implode(\PHP_EOL, $filesToRemove),
-        ];
-        $question = $this->t->trans(
-            'is.remove_music',
-            $params
-        );
-        if ($this->io->confirm($question, false)) {
-            foreach ($filesToRemove as $musicRealPath) {
-                $this->removeMusic($musicRealPath);
+                return Command::SUCCESS;
             }
-        } else {
-            $this->io->info($this->t->trans('command.rm.canceled'));
 
-            return Command::SUCCESS;
+            $params = [
+                '{{ files_to_remove }}' => \implode(\PHP_EOL, $filesToRemove),
+            ];
+            $question = $this->t->trans(
+                'is.remove_music',
+                $params
+            );
+            if ($this->io->confirm($question, false)) {
+                foreach ($filesToRemove as $musicRealPath) {
+                    $this->removeMusic($musicRealPath);
+                }
+            } else {
+                $this->io->info($this->t->trans('command.rm.canceled'));
+
+                return Command::SUCCESS;
+            }
+
+            $this->io->success($this->t->trans('command.rm.success', ['{{ rating }}' => $rating]));
+        } catch (\Throwable $e) {
+            $this->io->error($this->t->trans('command.rm.unexpected_error'));
+            $this->phpLogger->critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
         }
-
-        $this->io->success($this->t->trans('command.rm.success', ['{{ rating }}' => $rating]));
 
         return Command::SUCCESS;
     }
@@ -123,10 +130,12 @@ class RmCommand extends Command
     {
         try {
             $this->fs->remove($musicRealPath);
+            $this->musicLogger->notice(\sprintf('Track "%s" removed', $musicRealPath));
         } catch (\Throwable) {
             $this->io->warning([
                 $this->t->trans('error.remove_music', ['{{ music_real_path }}' => $musicRealPath]),
             ]);
+            $this->musicLogger->error(\sprintf('Track "%s" was not removed', $musicRealPath));
         }
     }
 }

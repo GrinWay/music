@@ -3,6 +3,7 @@
 namespace App\Music\Infrastructure\MusicService;
 
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -15,12 +16,13 @@ class DeezerMusicService extends AbstractCertainMusicService
         private readonly HttpClientInterface $appDeezerSearchHttpClient,
         private readonly SluggerInterface $slugger,
         private readonly Memcache $memcache,
+        private readonly LoggerInterface $musicLogger,
     ) {
     }
 
-    private function getCacheKey(string $searchString)
+    private function getCacheKey(string $searchString): string
     {
-        return $this->slugger->slug(
+        return (string) $this->slugger->slug(
             \sprintf(
                 '%s.%s',
                 self::CACHE_SESSION_KEY,
@@ -35,7 +37,6 @@ class DeezerMusicService extends AbstractCertainMusicService
     public function getMusicInfo(string $artist, string $musicName, bool $throw): ?array
     {
         try {
-            // todo current: throw new \RuntimeException('test ELK');
             $searchString = \sprintf('%s %s', $artist, $musicName);
             $cachedMusicInfo = $this->memcache->get(
                 $this->getCacheKey($searchString)
@@ -55,10 +56,10 @@ class DeezerMusicService extends AbstractCertainMusicService
                 $musicInfo = [$musicInfo];
             }
         } catch (\Throwable $e) {
-            // todo current logging to ELK
             if (true === $throw) {
                 throw $e;
             }
+            $this->musicLogger->critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
             return null;
         }
@@ -72,6 +73,14 @@ class DeezerMusicService extends AbstractCertainMusicService
 
     public function getCurrentRating(?array $musicInfo): ?int
     {
+        $hashMusicInfo = \hash('xxh128', \json_encode($musicInfo));
+        $cacheKeyMusicInfo = $this->getCacheKey($hashMusicInfo);
+
+        $cachedRating = $this->memcache->get($cacheKeyMusicInfo);
+        if (\is_int($cachedRating)) {
+            return $cachedRating;
+        }
+
         if (null === $musicInfo) {
             return null;
         }
@@ -85,7 +94,10 @@ class DeezerMusicService extends AbstractCertainMusicService
             return $a;
         }, 0);
 
-        return $this->getForm0To100ResizedRating($maxRank);
+        $rating = $this->getForm0To100ResizedRating($maxRank);
+        $this->memcache->set($cacheKeyMusicInfo, $rating, ['app.music.rating']);
+
+        return $rating;
     }
 
     public function clearCacheByGenericTag(): self

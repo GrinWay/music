@@ -4,6 +4,7 @@ namespace App\Music\Infrastructure\MusicService;
 
 use App\Music\Domain\Contract\Service\CertainMusicServiceInterface;
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
+use Psr\Log\LoggerInterface;
 use SpotifyWebAPI\Session as WebApiSession;
 use SpotifyWebAPI\SpotifyWebAPI;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -20,6 +21,7 @@ class SpotifyMusicService extends AbstractCertainMusicService
         #[Autowire(env: 'APP_SPOTIFY_CLIENT_ID')] private readonly string $clientId,
         #[Autowire(env: 'APP_SPOTIFY_CLIENT_SECRET')] private readonly string $clientSecret,
         private readonly Memcache $memcache,
+        private readonly LoggerInterface $musicLogger,
     ) {
         $this->webApiSession = new WebApiSession(
             $this->clientId,
@@ -55,6 +57,7 @@ class SpotifyMusicService extends AbstractCertainMusicService
             if (true === $throw) {
                 throw $e;
             }
+            $this->musicLogger->critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
             return null;
         }
