@@ -14,11 +14,7 @@ You have to have installed `docker` and `docker compose`.
 2.  Download project and run the application:
 
     ```
-    git clone git@github.com:GrinWay/music.git
-    ```
-
-    ```
-    cd '.../PROJECT_ROOT/docker/'
+    git clone git@github.com:GrinWay/music.git && cd music && touch .env.dev.local && cd docker
     ```
 
     ```
