@@ -13,7 +13,7 @@ services:
       # Контекст для Dockerfile и для build секции
       context: '..'
       dockerfile: './docker/frankenphp/Dockerfile'
-    working_dir: '/app/'
+    working_dir: '/app/load_music/'
     volumes:
       - './../:/app/'
       - './frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro'

@@ -5,8 +5,10 @@ RUN install-php-extensions \
     xdebug \
     memcached
 
+RUN rm -f /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 RUN apk update && \
     apk add --no-cache netcat-openbsd
 
-# todo: prod
-#COPY . .
+RUN printf '#!/bin/sh\nphp /app/bin/console "$@"\n' > /usr/local/bin/music \
+ && chmod +x /usr/local/bin/music
