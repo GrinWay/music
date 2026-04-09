@@ -16,7 +16,7 @@ git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.
 
 ## Usage
 
-1.  Copy music files to `load_music` directory of this project
+1.  Copy your music tracks to the `load_music` directory of this project
 2.  Run the application (in the `docker` dir):
 
     ```
@@ -28,6 +28,8 @@ git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.
     ```
     docker exec -it music sh -c "cd /app/load_music && music rm '< 90'"
     ```
+    
+    > You say: "I want to remove music with rating < 90 from `load_music` directory"
 
 4.  Accept or deny removal tracks with set rating.
 
