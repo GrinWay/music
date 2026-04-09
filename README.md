@@ -14,7 +14,7 @@ You have to have installed `docker` and `docker compose`.
 2.  Download project and run the application:
 
     ```
-    git clone git@github.com:GrinWay/music.git && cd music && touch .env.dev.local && cd docker
+    git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.dev.local && cd docker
     ```
 
     ```
@@ -24,7 +24,7 @@ You have to have installed `docker` and `docker compose`.
 3.  At last execute the removing
 
     ```
-    docker exec -it music music rm '< 90'
+    docker exec -it music sh -c "cd /app/load_music && music rm '< 90'"
     ```
 
 4.  Accept or deny removal tracks with set rating.

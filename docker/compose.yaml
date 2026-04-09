@@ -13,9 +13,11 @@ services:
       # Контекст для Dockerfile и для build секции
       context: '..'
       dockerfile: './docker/frankenphp/Dockerfile'
-    working_dir: '/app/load_music/'
+    working_dir: '/app/'
     volumes:
-      - './../:/app/'
+      # for dev only
+#      - './../:/app/'
+      - './../load_music:/app/load_music'
       - './frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro'
       - './frankenphp/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro'
     dns:
