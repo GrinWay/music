@@ -2,7 +2,6 @@
 
 namespace App\Music\Infrastructure\MusicService;
 
-use App\Music\Domain\Contract\Service\CertainMusicServiceInterface;
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
 use Psr\Log\LoggerInterface;
 use SpotifyWebAPI\Session as WebApiSession;

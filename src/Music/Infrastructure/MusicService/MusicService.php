@@ -3,10 +3,10 @@
 namespace App\Music\Infrastructure\MusicService;
 
 use App\Music\Application\Util\Hasher;
-use App\Music\Domain\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Domain\Contract\Service\MusicMetadataServiceInterface;
 use App\Music\Domain\Type\MusicType;
 use App\Music\Infrastructure\Contract\MusicStrategy\MusicStrategyInterface;
+use App\Music\Infrastructure\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
@@ -62,6 +62,7 @@ class MusicService implements GenericMusicServiceInterface
 
         $artist = \trim($artist);
         $this->memcache->set($artistCacheKey, $artist, ['app.music.artist']);
+
         return $artist;
     }
 
@@ -89,6 +90,7 @@ class MusicService implements GenericMusicServiceInterface
 
         $musicName = \trim($musicName);
         $this->memcache->set($musicNameCacheKey, $musicName, ['app.music.music_name']);
+
         return $musicName;
     }
 
@@ -129,6 +131,7 @@ class MusicService implements GenericMusicServiceInterface
             $this->fs->remove($realPath);
             $this->musicLogger->notice(\sprintf('Track "%s" removed', $realPath));
         }
+
         return $this;
     }
 

@@ -2,9 +2,9 @@
 
 namespace App\Music\Infrastructure\MusicStrategy;
 
-use App\Music\Domain\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Domain\Type\MusicType;
 use App\Music\Infrastructure\Contract\MusicStrategy\MusicStrategyInterface;
+use App\Music\Infrastructure\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Infrastructure\MusicService\DeezerMusicService;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\ExpressionLanguage\ExpressionLanguage;

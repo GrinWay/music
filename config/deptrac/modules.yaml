@@ -11,6 +11,10 @@ deptrac:
             collectors:
                 -   type: classNameRegex
                     value: '~^App\\Framework\\~'
+        -   name: Memcache
+            collectors:
+                -   type: classNameRegex
+                    value: '~^App\\Memcache\\~'
         -   name: Music
             collectors:
                 -   type: classNameRegex
@@ -21,4 +25,4 @@ deptrac:
 
     # (№2) Но оставляю ровно 1 место в каждом модуле для межмодульного взаимодействия
     exclude_files:
-        - '~./../../src/.*/Infrastructure/ModuleAdapter~'
+        - '~src/.*/Infrastructure/ModuleAdapter/.*~'

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Music\Domain\Contract\Service;
+namespace App\Music\Infrastructure\Contract\Service;
 
 interface GenericMusicServiceInterface
 {

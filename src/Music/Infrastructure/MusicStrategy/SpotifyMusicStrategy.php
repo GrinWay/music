@@ -2,8 +2,8 @@
 
 namespace App\Music\Infrastructure\MusicStrategy;
 
-use App\Music\Domain\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Infrastructure\Contract\MusicStrategy\MusicStrategyInterface;
+use App\Music\Infrastructure\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Infrastructure\MusicService\SpotifyMusicService;
 use Symfony\Component\Finder\SplFileInfo;
 
