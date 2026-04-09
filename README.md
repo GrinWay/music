@@ -11,7 +11,7 @@ You have to have installed `docker` and `docker compose`.
 ## Usage
 
 1.  Copy music files to `load_music` directory of this project
-2.  Download project and run application:
+2.  Download project and run the application:
 
     ```
     git clone git@github.com:GrinWay/music.git
