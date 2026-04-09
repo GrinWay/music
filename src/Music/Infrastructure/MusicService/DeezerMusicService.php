@@ -34,8 +34,11 @@ class DeezerMusicService extends AbstractCertainMusicService
     public function getMusicInfo(string $artist, string $musicName, bool $throw): ?array
     {
         try {
+            // todo current: throw new \RuntimeException('test ELK');
             $searchString = \sprintf('%s %s', $artist, $musicName);
-            $cachedMusicInfo = $this->memcache->get($this->getCacheKey($searchString));
+            $cachedMusicInfo = $this->memcache->get(
+                $this->getCacheKey($searchString)
+            );
             if (\is_array($cachedMusicInfo)) {
                 return $cachedMusicInfo;
             }
@@ -51,6 +54,7 @@ class DeezerMusicService extends AbstractCertainMusicService
                 $musicInfo = [$musicInfo];
             }
         } catch (\Throwable $e) {
+            // todo current logging to ELK
             if (true === $throw) {
                 throw $e;
             }

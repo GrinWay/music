@@ -1,3 +1,19 @@
 is.remove_music: |
     Удалить треки?
     {{ files_to_remove }}
+
+command.rm.canceled: |
+    Удаление треков отменено.
+
+command.rm.invalid_rating_arg: |
+    Неправильный аргумент rating: "{{ rating }}"
+    Правильный например: "< 90"
+
+command.rm.no_files_to_remove: |
+    Нет треков с rating: "{{ rating }}"
+
+command.rm.success: |
+    Треки с rating: "{{ rating }}" удалены.
+
+error.remove_music: |
+    Ошибка удаления трека "{{ music_real_path }}".

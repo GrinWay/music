@@ -84,7 +84,9 @@ class RmCommand extends Command
         );
 
         if (empty($filesToRemove)) {
-            $this->io->warning($this->t->trans('command.rm.no_files_to_remove'));
+            $this->io->warning(
+                $this->t->trans('command.rm.no_files_to_remove', ['{{ rating }}' => $rating])
+            );
 
             return Command::SUCCESS;
         }
@@ -106,7 +108,7 @@ class RmCommand extends Command
             return Command::SUCCESS;
         }
 
-        $this->io->success($this->t->trans('command.rm.success'));
+        $this->io->success($this->t->trans('command.rm.success', ['{{ rating }}' => $rating]));
 
         return Command::SUCCESS;
     }
