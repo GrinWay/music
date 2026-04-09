@@ -7,7 +7,7 @@ x-extra_hosts: &x-extra_hosts
 services:
   frankenphp:
     <<: *x-extra_hosts
-    container_name: music_frankenphp
+    container_name: music
     restart: 'unless-stopped'
     build:
       # Контекст для Dockerfile и для build секции

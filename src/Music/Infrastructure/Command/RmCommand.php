@@ -53,7 +53,7 @@ class RmCommand extends Command
     private static function isInvalidRatingArg(string $rating): bool
     {
         return !Validation::createIsValidCallable(
-            new Assert\Regex('/^[><]\s?\d{1,3}$/')
+            new Assert\Regex('/^(?:<|>|<=|>=|==|!=)\s?(?:100|\d{1,2})$/')
         )($rating);
     }
 
