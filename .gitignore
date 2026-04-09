@@ -3,6 +3,8 @@
 !/docker/*/volumes/.gitignore
 /docker/memcached/volumes/*
 !/docker/memcached/volumes/.gitignore
+/load_music/*
+!/load_music/.gitignore
 ###< app ###
 
 ###> symfony/framework-bundle ###
