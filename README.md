@@ -8,14 +8,16 @@ Imaging you downloaded plenty of tracks and want to get rid of ones with low rat
 
 You have to have installed `docker` and `docker compose`.
 
+## Downloading and installation
+
+```
+git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.dev.local && cd docker
+```
+
 ## Usage
 
 1.  Copy music files to `load_music` directory of this project
-2.  Download project and run the application:
-
-    ```
-    git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.dev.local && cd docker
-    ```
+2.  Run the application (in the `docker` dir):
 
     ```
     docker compose down && docker compose up
@@ -33,7 +35,7 @@ You have to have installed `docker` and `docker compose`.
 
 Strategy decides what API to choose to download the music rating.
 
-By default music rating is taken with the help of `deezer` strategy.
+By default, music rating is taken with the help of `deezer` strategy.
 
 To tell the truth, it’s the only available strategy, because it’s free in contrast to non-existent `spotify` strategy.
 
