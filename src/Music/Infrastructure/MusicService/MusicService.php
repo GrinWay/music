@@ -2,6 +2,7 @@
 
 namespace App\Music\Infrastructure\MusicService;
 
+use App\Music\Application\Util\Hasher;
 use App\Music\Domain\Contract\Service\GenericMusicServiceInterface;
 use App\Music\Domain\Contract\Service\MusicMetadataServiceInterface;
 use App\Music\Domain\Type\MusicType;
@@ -36,7 +37,7 @@ class MusicService implements GenericMusicServiceInterface
 
     public function getArtistFromMetadata(\SplFileInfo $musicFileInfo): ?string
     {
-        $artistCacheKey = \hash('xxh128', \json_encode($musicFileInfo));
+        $artistCacheKey = Hasher::fastHash($musicFileInfo);
         $artist = $this->memcache->get($artistCacheKey);
         if (null !== $artist) {
             return $artist;
@@ -66,7 +67,7 @@ class MusicService implements GenericMusicServiceInterface
 
     public function getMusicNameFromMetadata(\SplFileInfo $musicFileInfo): ?string
     {
-        $musicNameCacheKey = \hash('xxh128', \json_encode($musicFileInfo));
+        $musicNameCacheKey = Hasher::fastHash($musicFileInfo);
         $musicName = $this->memcache->get($musicNameCacheKey);
         if (null !== $musicName) {
             return $musicName;

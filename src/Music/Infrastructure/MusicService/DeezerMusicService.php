@@ -2,6 +2,7 @@
 
 namespace App\Music\Infrastructure\MusicService;
 
+use App\Music\Application\Util\Hasher;
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
@@ -73,7 +74,7 @@ class DeezerMusicService extends AbstractCertainMusicService
 
     public function getCurrentRating(?array $musicInfo): ?int
     {
-        $hashMusicInfo = \hash('xxh128', \json_encode($musicInfo));
+        $hashMusicInfo = Hasher::fastHash($musicInfo);
         $cacheKeyMusicInfo = $this->getCacheKey($hashMusicInfo);
 
         $cachedRating = $this->memcache->get($cacheKeyMusicInfo);
