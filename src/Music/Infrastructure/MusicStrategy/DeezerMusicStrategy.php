@@ -41,4 +41,11 @@ class DeezerMusicStrategy implements MusicStrategyInterface
 
         return (bool) $isCorrespondingToRating;
     }
+
+    public function clearCacheByGenericTag(): MusicStrategyInterface
+    {
+        $this->deezerMusicService->clearCacheByGenericTag();
+
+        return $this;
+    }
 }

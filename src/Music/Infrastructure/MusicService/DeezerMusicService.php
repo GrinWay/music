@@ -9,6 +9,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class DeezerMusicService extends AbstractCertainMusicService
 {
     public const CACHE_SESSION_KEY = 'app.deezer.found_result';
+    public const GENERIC_CACHE_TAG = 'app.deezer';
 
     public function __construct(
         private readonly HttpClientInterface $appDeezerSearchHttpClient,
@@ -63,7 +64,7 @@ class DeezerMusicService extends AbstractCertainMusicService
         }
 
         if (!empty($musicInfo)) {
-            $this->memcache->set($this->getCacheKey($searchString), $musicInfo, ['app.deezer']);
+            $this->memcache->set($this->getCacheKey($searchString), $musicInfo, [self::GENERIC_CACHE_TAG]);
         }
 
         return $musicInfo;
@@ -85,5 +86,12 @@ class DeezerMusicService extends AbstractCertainMusicService
         }, 0);
 
         return $this->getForm0To100ResizedRating($maxRank);
+    }
+
+    public function clearCacheByGenericTag(): self
+    {
+        $this->memcache->clearByTag(self::GENERIC_CACHE_TAG);
+
+        return $this;
     }
 }

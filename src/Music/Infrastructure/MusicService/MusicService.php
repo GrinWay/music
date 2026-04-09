@@ -83,6 +83,7 @@ class MusicService implements GenericMusicServiceInterface
     public function rm(
         MusicType $strategy,
         string $rating,
+        bool $clearStrategyMusicInfoCache,
         bool $throw,
         ?callable $beforeRemoveMusicCycleHook = null,
     ): bool {
@@ -90,6 +91,10 @@ class MusicService implements GenericMusicServiceInterface
         try {
             /** @var MusicStrategyInterface $strategy */
             $strategy = $this->strategyLocator->get($strategy->value);
+
+            if (true === $clearStrategyMusicInfoCache) {
+                $strategy->clearCacheByGenericTag();
+            }
 
             $musicFinder = $this->getMusicFinder();
             $musicFinder = $this->getFilteredByMusicRating($musicFinder, $strategy, $rating);

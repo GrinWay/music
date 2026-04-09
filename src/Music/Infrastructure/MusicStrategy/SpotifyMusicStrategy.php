@@ -31,4 +31,10 @@ class SpotifyMusicStrategy implements MusicStrategyInterface
         // todo
         return false;
     }
+
+    public function clearCacheByGenericTag(): MusicStrategyInterface
+    {
+        // TODO: Implement clearCacheByGenericTag() method.
+        return $this;
+    }
 }

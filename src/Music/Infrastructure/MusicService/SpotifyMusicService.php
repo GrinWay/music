@@ -2,6 +2,7 @@
 
 namespace App\Music\Infrastructure\MusicService;
 
+use App\Music\Domain\Contract\Service\CertainMusicServiceInterface;
 use App\Music\Infrastructure\ModuleAdapter\Memcache;
 use SpotifyWebAPI\Session as WebApiSession;
 use SpotifyWebAPI\SpotifyWebAPI;
@@ -65,5 +66,11 @@ class SpotifyMusicService extends AbstractCertainMusicService
     {
         // TODO: Implement getCurrentRating() method.
         return null;
+    }
+
+    public function clearCacheByGenericTag(): self
+    {
+        // TODO: Implement clearCacheByGenericTag() method.
+        return $this;
     }
 }

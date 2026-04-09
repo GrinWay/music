@@ -10,4 +10,6 @@ interface CertainMusicServiceInterface
      * @return int|null Range: 0 - 100
      */
     public function getCurrentRating(?array $musicInfo): ?int;
+
+    public function clearCacheByGenericTag(): self;
 }

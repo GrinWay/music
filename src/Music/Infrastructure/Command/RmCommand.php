@@ -6,6 +6,7 @@ use App\Music\Domain\Type\MusicType;
 use App\Music\Infrastructure\MusicService\MusicService;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Attribute\Option;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,6 +62,10 @@ class RmCommand extends Command
     public function __invoke(
         #[Argument] string $rating,
         #[Argument] MusicType $strategy = MusicType::Deezer,
+        #[Option(
+            description: 'Do remove music info cache?',
+            name: 'cache-clear',
+        )] bool $clearStrategyMusicInfoCache = false,
     ): int {
         $rating = self::getNormalizeRating($rating);
         if (self::isInvalidRatingArg($rating)) {
@@ -79,6 +84,7 @@ class RmCommand extends Command
         $this->musicService->rm(
             $strategy,
             $rating,
+            $clearStrategyMusicInfoCache,
             false,
             $beforeRmCycleHook
         );
