@@ -18,8 +18,9 @@ services:
       - './../:/app/'
       - './frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro'
       - './frankenphp/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro'
-    env_file:
-      - './../.env'
+    dns:
+      - 1.1.1.1   # Cloudflare
+      - 8.8.8.8   # Google
 
   music_memcached:
     container_name: music_memcached

@@ -28,11 +28,11 @@ class RmCommand extends Command
     private SymfonyStyle $io;
 
     public function __construct(
-        private readonly MusicService $musicService,
+        private readonly MusicService        $musicService,
         private readonly TranslatorInterface $t,
-        private readonly Filesystem $fs,
-        ?string $name = null,
-        ?callable $code = null,
+        private readonly Filesystem          $fs,
+        ?string                              $name = null,
+        ?callable                            $code = null,
     ) {
         parent::__construct($name, $code);
     }
@@ -43,8 +43,8 @@ class RmCommand extends Command
     }
 
     public function __invoke(
-        #[Argument] MusicType $strategy = MusicType::Spotify,
-        #[Argument] string $rating = '< 80',
+        #[Argument] MusicType $strategy,
+        #[Argument] string $rating,
     ): int {
         $filesToRemove = [];
         $beforeRmCycleHook = static function (SplFileInfo $splFileInfo) use (&$filesToRemove): void {

@@ -9,4 +9,6 @@ services:
     App\:
         resource: '../../src/'
         exclude:
-            - '../../src/Framework/'
+            - '../../src/*/Domain/Entity/'
+            - '../../src/Framework/Domain/'
+            - '../../src/Framework/Application/'

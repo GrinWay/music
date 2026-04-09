@@ -3,9 +3,9 @@
 namespace App\Music\Domain\Type;
 
 /**
- * If add this, add MusicStrategy as well.
+ * If add this, add Infrastructure/MusicStrategy as well.
  */
 enum MusicType: string
 {
-    case Spotify = 'spotify';
+//    case Spotify = 'spotify';
 }

@@ -9,6 +9,11 @@ services:
       PHP_INI_MAX_EXECUTION_TIME: '10'
       APP_ENV: 'dev'
       PHP_IDE_CONFIG: 'serverName=music'
+    env_file:
+      - './../.env'
+      - './../.env.dev'
+      - './../.env.test'
+      - './../.env.dev.local'
 
   music_memcached:
     ports:

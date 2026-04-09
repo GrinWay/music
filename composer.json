@@ -7,10 +7,13 @@
         "php": ">=8.5",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "james-heinrich/getid3": "^1.9",
+        "jwilsson/spotify-web-api-php": "^7.1",
         "symfony/console": "8.0.*",
         "symfony/dotenv": "8.0.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "8.0.*",
+        "symfony/http-client": "8.0.*",
         "symfony/runtime": "8.0.*",
         "symfony/translation": "8.0.*",
         "symfony/yaml": "8.0.*"

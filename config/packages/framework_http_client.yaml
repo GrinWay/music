@@ -1,0 +1,12 @@
+framework:
+    http_client:
+        enabled: true
+
+        scoped_clients:
+
+            app.spotify.http_client:
+                base_uri: 'https://api.spotify.com/v1/'
+                auth_bearer: '%env(APP_SPOTIFY_ACCESS_TOKEN)%'
+#                auth_basic: '%env(resolve:APP_SPOTIFY_CLIENT_ID_AND_SECRET_BASE64)%'
+#                headers:
+#                    Content-Type: 'application/json'
