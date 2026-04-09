@@ -66,7 +66,7 @@ class RmCommand extends Command
         #[Argument] string $rating,
         #[Argument] MusicType $strategy = MusicType::Deezer,
         #[Option(
-            description: 'Do remove music info cache?',
+            description: 'Do http request again to get music info?',
             name: 'cache-clear',
         )] bool $clearStrategyMusicInfoCache = false,
     ): int {
