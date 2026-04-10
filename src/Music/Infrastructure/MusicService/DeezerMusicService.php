@@ -75,9 +75,9 @@ class DeezerMusicService extends AbstractCertainMusicService
     public function getCurrentRating(?array $musicInfo): ?int
     {
         $hashMusicInfo = Hasher::fastHash($musicInfo);
-        $cacheKeyMusicInfo = $this->getCacheKey($hashMusicInfo);
+        $musicInfoCacheKey = $this->getCacheKey($hashMusicInfo);
 
-        $cachedRating = $this->memcache->get($cacheKeyMusicInfo);
+        $cachedRating = $this->memcache->get($musicInfoCacheKey);
         if (\is_int($cachedRating)) {
             return $cachedRating;
         }
@@ -96,7 +96,7 @@ class DeezerMusicService extends AbstractCertainMusicService
         }, 0);
 
         $rating = $this->getForm0To100ResizedRating($maxRank);
-        $this->memcache->set($cacheKeyMusicInfo, $rating, ['app.music.rating']);
+        $this->memcache->set($musicInfoCacheKey, $rating, ['app.music.rating']);
 
         return $rating;
     }

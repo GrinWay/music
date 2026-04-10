@@ -37,9 +37,9 @@ class MusicService implements GenericMusicServiceInterface
 
     public function getArtistFromMetadata(\SplFileInfo $musicFileInfo): ?string
     {
-        $artistCacheKey = Hasher::fastHash($musicFileInfo);
+        $artistCacheKey = $this->getMusicCacheKey($musicFileInfo);
         $artist = $this->memcache->get($artistCacheKey);
-        if (null !== $artist) {
+        if (\is_string($artist)) {
             return $artist;
         }
 
@@ -68,9 +68,9 @@ class MusicService implements GenericMusicServiceInterface
 
     public function getMusicNameFromMetadata(\SplFileInfo $musicFileInfo): ?string
     {
-        $musicNameCacheKey = Hasher::fastHash($musicFileInfo);
+        $musicNameCacheKey = $this->getMusicCacheKey($musicFileInfo);
         $musicName = $this->memcache->get($musicNameCacheKey);
-        if (null !== $musicName) {
+        if (\is_string($musicName)) {
             return $musicName;
         }
 
@@ -158,5 +158,16 @@ class MusicService implements GenericMusicServiceInterface
         };
 
         return new \CallbackFilterIterator($musicFinder->getIterator(), $filter);
+    }
+
+    private function getMusicCacheKey(\SplFileInfo $musicFileInfo): string
+    {
+        $musicData = [
+            $musicFileInfo->getRealPath(),
+            $musicFileInfo->getMTime(),
+            $musicFileInfo->getSize(),
+        ];
+
+        return Hasher::fastHash($musicData);
     }
 }
