@@ -1,5 +1,5 @@
 is.remove_music: |
-    Удалить треки?
+    Удалить треки? [{{ total }}]
     {{ files_to_remove }}
 
 command.rm.canceled: |

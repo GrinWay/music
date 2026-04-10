@@ -102,6 +102,7 @@ class RmCommand extends Command
 
             $params = [
                 '{{ files_to_remove }}' => \implode(\PHP_EOL, $filesToRemove),
+                '{{ total }}' => \count($filesToRemove),
             ];
             $question = $this->t->trans(
                 'is.remove_music',
