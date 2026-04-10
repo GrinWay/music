@@ -122,6 +122,8 @@ class RmCommand extends Command
         } catch (\Throwable $e) {
             $this->io->error($this->t->trans('command.rm.unexpected_error'));
             $this->phpLogger->critical($e->getMessage(), ['trace' => $e->getTraceAsString()]);
+
+            return Command::FAILURE;
         }
 
         return Command::SUCCESS;
