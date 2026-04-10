@@ -23,7 +23,7 @@ git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.
     docker compose down && docker compose up
     ```
 
-3.  At last execute the removing
+3.  At last, open a new terminal and execute the removing
 
     ```
     docker exec -it music sh -c "cd /app/load_music && music rm '< 90'"
