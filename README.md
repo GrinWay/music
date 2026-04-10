@@ -20,18 +20,20 @@ git clone git@github.com:GrinWay/music.git && cd music && touch .env.local .env.
 2.  Run the application (in the `docker` dir):
 
     ```
-    docker compose down && docker compose up
+    clear && docker compose down && docker compose up
     ```
 
 3.  At last, open a new terminal and execute the removing
 
     ```
-    docker exec -it music sh -c "cd /app/load_music && music rm '< 90'"
+    clear && docker exec -it music sh -c "cd /app/load_music && music rm '< 90'"
     ```
     
     > You say: "I want to remove music with rating < 90 from `load_music` directory"
 
 4.  Accept or deny removal tracks with set rating.
+
+5.  Accept or deny removal tracks with set rating.
 
 ## What is strategy?
 
@@ -50,5 +52,13 @@ Inside the container you could pass the strategy explicitly:
 ```
 music rm '< 90' deezer
 ```
+
+You can see local logs by link:
+
+```
+http://localhost:5601/app/discover#/?_g=(filters:!(),query:(language:kuery,query:music),refreshInterval:(pause:!t,value:10000),time:(from:now-15m,to:now))&_a=(columns:!(channel,message,context.trace,level_name,datetime),filters:!(),grid:(columns:(channel:(width:91),message:(width:429))),index:'1596646f-456a-4741-bce9-13f476e69dc7',interval:auto,query:(language:kuery,query:'channel:music%20and%20level_name:CRITICAL'),sort:!())
+```
+
+## Finally
 
 Amazing, I love Symfony.

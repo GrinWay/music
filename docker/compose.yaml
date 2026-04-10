@@ -17,7 +17,7 @@ services:
     volumes:
       # for dev only
 #      - './../:/app/'
-      - './../load_music:/app/load_music'
+      - './../load_music/:/app/load_music/'
       - './frankenphp/Caddyfile:/etc/frankenphp/Caddyfile:ro'
       - './frankenphp/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini:ro'
     dns:
